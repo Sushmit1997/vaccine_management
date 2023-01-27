@@ -1,14 +1,18 @@
+
 import './App.css';
+import RouterComponent from './router/routes';
+import { title } from 'process'
+import { ToastProvider } from 'react-toast-notifications';
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-      </header>
+      <ToastProvider autoDismiss={true}>
+        <RouterComponent title={title} />
+      </ToastProvider>
     </div>
+
   );
 }
 

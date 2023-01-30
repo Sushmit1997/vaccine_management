@@ -37,14 +37,17 @@ const LoginPage = () => {
 
 
   const handleSubmit = async () => {
+    setSigningIn(true)
     await Services.sendSignin(loginData).then((response) => {
       addToast('Signin Successfull', { appearance: 'success' });
       localStorage.setItem('token', response.token);
       localStorage.setItem('user', JSON.stringify(response.user))
+      setSigningIn(false)
       navigate('home')
     })
       .catch((err) => {
         addToast("Invalid Email or Password.", { appearance: 'error' });
+        setSigningIn(false)
       })
   }
 
@@ -83,7 +86,7 @@ const LoginPage = () => {
             </div>
             <div className="flex w-full">
 
-              <button onClick={handleSubmit} type="submit" className="py-2 px-4  bg-purple-600 hover:bg-purple-700 focus:ring-purple-500 focus:ring-offset-purple-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+              <button disabled={signingIn} onClick={handleSubmit} type="submit" className="py-2 px-4  bg-purple-600 hover:bg-purple-700 focus:ring-purple-500 focus:ring-offset-purple-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
                 Login
               </button>
 

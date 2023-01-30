@@ -1,22 +1,22 @@
 
 import { useEffect, useState } from "react"
-import { useToasts } from 'react-toast-notifications';
-
+import { useToasts } from "react-toast-notifications";
 import { avatar } from "../assets"
 
-
-
+const isImage = require('../utils/isImage')
 const Services = require('../remoteServices/RemoteServices');
 
 const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
-  const address = process.env.REACT_APP_API_URL
+  const address = 'http://localhost:5000'
+  // const address = process.env.REACT_APP_API_URL
   const [imagePreview, setImagePreview] = useState(address + "/" + vaccine?.image)
 
   const [formData, setFormData] = useState({
     name: vaccine.name,
     company_email: vaccine.company_email,
-    company_number: vaccine.company_number,
+    company_contact: vaccine.company_contact,
     number_of_dose: vaccine.number_of_dose,
+    image: vaccine.image,
   })
 
   useEffect(() => {
@@ -30,37 +30,22 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
     setFormData({ ...formData, [event.target.name]: event.target.value })
   }
 
-  const getExtension = (filename) => {
-    var parts = filename.split('.');
-    return parts[parts.length - 1];
-  }
-
-  const isImage = (filename) => {
-    var ext = getExtension(filename);
-    switch (ext.toLowerCase()) {
-      case 'jpg':
-      case 'gif':
-      case 'bmp':
-      case 'png':
-      case 'jpeg':
-        //etc
-        return true;
-    }
-    return false;
-  }
-
   const handleImageSelect = (e) => {
     let fileName = e.target.files[0].name
     let file = e.target.files[0]
     if (isImage(fileName)) {
       setFormData({ ...formData, image: file })
       setImagePreview(URL.createObjectURL(e.target.files[0]))
+    } else {
+      addToast('Wrong file format!', {appearance: 'error'})
     }
   }
+
 
   const handleFormSubmit = () => {
 
     const data = new FormData()
+    data.append('image', formData.image)
     data.append('name', formData.name)
     data.append('company_email', formData.company_email)
     data.append('company_contact', formData.company_contact)
@@ -109,7 +94,7 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
               Company Phone Number
             </label>
-            <input value={formData.company_contact} name="company_contact" onChange={(e) => handleFormData(e)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Phone Number"></input>
+            <input value={formData.company_contact} name="company_contact" onChange={(e) => handleFormData(e)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="number" placeholder="Phone Number"/>
             <p className="text-red-500 text-xs italic">Please fill out this field.</p>
           </div>
         </div>

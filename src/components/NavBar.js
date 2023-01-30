@@ -1,7 +1,8 @@
+import React from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import Modal from 'react-modal'
-import ContactForm from "./VaccineForm";
+import VaccineForm from "./VaccineForm";
 
 const customStyles = {
   content: {
@@ -14,7 +15,7 @@ const customStyles = {
   },
 };
 
-const NavBar = ({ getContacts }) => {
+const NavBar = ({ getVaccines }) => {
   const [showModal, setShowModal] = useState(false)
   const navigate = useNavigate()
   const closeModal = () => {
@@ -36,7 +37,7 @@ const NavBar = ({ getContacts }) => {
 
   const handleActionSuccess = () => {
     closeModal()
-    getContacts()
+    getVaccines()
   }
 
   return (
@@ -55,7 +56,7 @@ const NavBar = ({ getContacts }) => {
         contentLabel="Example Modal"
         onRequestClose={closeModal}
       >
-        <ContactForm vaccine={vaccine} action="add" handleActionSuccess={handleActionSuccess} />
+        <VaccineForm vaccine={vaccine} action="add" handleActionSuccess={handleActionSuccess} />
       </Modal>
     </nav>
   )

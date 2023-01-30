@@ -1,23 +1,12 @@
 import * as React from 'react'
 import { Navigate } from 'react-router-dom'
-
-
+const isAuthenticated = require('../utils/isAuthenticated')
 
 const PrivateRoute = ({ children }) => {
-
-  const isAuthenticated = () => {
-    let isAuthenticated = false
-
-    const token = localStorage.getItem('token')
-    if (token) {
-      isAuthenticated = true
-    }
-    return isAuthenticated
-  }
 
   return isAuthenticated() ? children : <Navigate to="/" />
 
 }
 
 
-export default PrivateRoute
+export default PrivateRoute;

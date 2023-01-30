@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { LoginPage, RegisterPage, HomePage } from '../pages';
-import PrivateRoute from './privateRoute';
-
+import PrivateRoute from './privateRoute'
 
 const RouterComponent = () => {
   return (

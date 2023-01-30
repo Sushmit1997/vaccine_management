@@ -23,8 +23,8 @@ const VaccineCard = ({ vaccine, getVaccines }) => {
   const [showModal, setShowModal] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
-  // const address = 'http://localhost:5000/'
-  const address = process.env.REACT_APP_API_URL
+  const address = 'http://localhost:5000'
+  // const address = process.env.REACT_APP_API_URL
 
   const { addToast } = useToasts();
 
@@ -64,7 +64,7 @@ const VaccineCard = ({ vaccine, getVaccines }) => {
 
       <div className="relative max-w-[500px] min-w-[300px] bg-white shadow-xl rounded-lg py-3 shadow-3xl">
         <div onClick={() => setShowMenu(true)} className="absolute right-[15px] top-[5px] cursor-pointer "><i className="fa fa-ellipsis-v "></i></div>
-        <div onClick={handleMandatory} className="absolute right-[35px] top-[5px] cursor-pointer "><i className={`fa fa-heart ${vaccine.isMandatory ? 'text-red-500' : 'text-black'} `}></i></div>
+        <div onClick={handleMandatory} className="absolute right-[35px] top-[5px] cursor-pointer "><i className={`fa fa-map-pin ${vaccine.isMandatory ? 'text-red-500' : 'text-black'} `}></i></div>
         {showMenu && <div onMouseLeave={() => setShowMenu(false)} className="absolute right-[-70px] top-[5px] cursor-pointer bg-white p-[5px] shadow-sm"><ul>
           <li className="hover:text-teal-500" onClick={() => setShowModal(true)}>Update</li>
           <li className="hover:text-teal-500" onClick={() => setShowDeleteConfirm(true)}>Delete</li>
@@ -72,7 +72,7 @@ const VaccineCard = ({ vaccine, getVaccines }) => {
         </div>
         }
         <div className="photo-wrapper p-2">
-          <img className="w-32 h-32 rounded-full mx-auto" src={vaccine.image ? address + "/" + vaccine.image : avatar} alt="John Doe"></img>
+        <img className="w-32 h-32 rounded-full mx-auto" src={vaccine.image ? address + "/" + vaccine.image : avatar} alt={`${vaccine.name} Image`}></img>
         </div>
         <div className="p-2">
           <h3 className="text-center text-xl text-gray-900 font-medium leading-8">{vaccine.name}</h3>

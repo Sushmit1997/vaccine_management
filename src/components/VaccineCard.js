@@ -1,22 +1,20 @@
 import { avatar } from "../assets"
 import { useEffect, useState } from 'react'
-import Modal from 'react-modal';
+import Modal from 'react-responsive-modal';
+import "react-responsive-modal/styles.css";
 import VaccineForm from "./VaccineForm";
 import { useToasts } from 'react-toast-notifications';
 
 
 const Services = require('../remoteServices/RemoteServices');
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
+const styles = {
+  fontFamily: "sans-serif",
+  fontSize: "14px",
+  textAlign: "center",
+  width: "50%"
 };
+
 
 const VaccineCard = ({ vaccine, getVaccines }) => {
   const [showMenu, setShowMenu] = useState(false)
@@ -96,20 +94,22 @@ const VaccineCard = ({ vaccine, getVaccines }) => {
         </div>
       </div>
       <Modal
-        isOpen={showModal}
-        style={customStyles}
+        open={showModal}
         contentLabel="Example Modal"
-        onRequestClose={closeModal}
-
+        onClose={closeModal}
+        showCloseIcon
+        closeOnEsc
       >
         <VaccineForm vaccine={vaccine} action='update' handleActionSuccess={handleActionSuccess} />
       </Modal>
       <Modal
-        isOpen={showDeleteConfirm}
-        style={customStyles}
-        contentLabel="Example Modal"
-        onRequestClose={closeDeleteConfirm}
+        open={showDeleteConfirm}
+        style={styles}
+        onClose={closeDeleteConfirm}
+        closeOnEsc
+        center
       >
+        <br/>
         <div className="flex-column">
           <span className="text-lg">Are you sure you want to delete this vaccine?</span>
           <div className="flex justify-between w-1/2 mt-5">

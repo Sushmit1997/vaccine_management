@@ -1,19 +1,11 @@
 import React from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import Modal from 'react-modal'
+import Modal from 'react-responsive-modal'
 import VaccineForm from "./VaccineForm";
+import "./vaccineForm.scss"
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
+
 
 const NavBar = ({ getVaccines }) => {
   const [showModal, setShowModal] = useState(false)
@@ -29,6 +21,12 @@ const NavBar = ({ getVaccines }) => {
     number_of_dose: '',
     image: ''
   }
+
+  const styles = {
+    fontFamily: "sans-serif",
+    textAlign: "center",
+    width: "50%"
+  };
 
   const handleLogOut = () => {
     localStorage.clear('token')
@@ -51,10 +49,10 @@ const NavBar = ({ getVaccines }) => {
         </div>
       </div>
       <Modal
-        isOpen={showModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-        onRequestClose={closeModal}
+        open={showModal}
+        style={styles}
+        onClose={closeModal}
+        closeOnEsc
       >
         <VaccineForm vaccine={vaccine} action="add" handleActionSuccess={handleActionSuccess} />
       </Modal>

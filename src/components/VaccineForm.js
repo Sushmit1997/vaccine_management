@@ -1,7 +1,14 @@
 
 import { useEffect, useState } from "react"
 import { useToasts } from "react-toast-notifications";
+import { checkIfFilesAreCorrectType, checkIfFilesAreTooBig } from "../utils/fileValidation";
+
 import { avatar } from "../assets"
+
+import "./vaccineForm.scss"
+
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 const isImage = require('../utils/isImage')
 const Services = require('../remoteServices/RemoteServices');
@@ -11,13 +18,14 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
   // const address = process.env.REACT_APP_API_URL
   const [imagePreview, setImagePreview] = useState(address + "/" + vaccine?.image)
 
-  const [formData, setFormData] = useState({
+  const formData = {
     name: vaccine.name,
     company_email: vaccine.company_email,
     company_contact: vaccine.company_contact,
     number_of_dose: vaccine.number_of_dose,
     image: vaccine.image,
-  })
+    gender: vaccine.gender
+  }
 
   useEffect(() => {
     action === 'add' && setImagePreview(avatar)
@@ -26,30 +34,35 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
 
   const { addToast } = useToasts();
 
-  const handleFormData = (event) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value })
-  }
 
-  const handleImageSelect = (e) => {
+  const handleImageSelect = (e, setFieldValue) => {
     let fileName = e.target.files[0].name
     let file = e.target.files[0]
     if (isImage(fileName)) {
-      setFormData({ ...formData, image: file })
+      setFieldValue('image', file)
       setImagePreview(URL.createObjectURL(e.target.files[0]))
     } else {
       addToast('Wrong file format!', {appearance: 'error'})
     }
   }
 
+  const vaccineSchema = Yup.object().shape({
+    name: Yup.string().required("Required"),
+    company_email : Yup.string().email().required("Required"),
+    company_contact: Yup.string().required("Required"),
+    number_of_dose: Yup.number().required("Required"),
+    image: Yup.mixed()
+  });
 
-  const handleFormSubmit = () => {
+
+  const handleFormSubmit = (values) => {
 
     const data = new FormData()
-    data.append('image', formData.image)
-    data.append('name', formData.name)
-    data.append('company_email', formData.company_email)
-    data.append('company_contact', formData.company_contact)
-    data.append('number_of_dose', formData.number_of_dose)
+    data.append('image', values.image)
+    data.append('name', values.name)
+    data.append('company_email', values.company_email)
+    data.append('company_contact', values.company_contact)
+    data.append('number_of_dose', values.number_of_dose)
 
 
     action === 'add' ?
@@ -72,7 +85,114 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
 
   return (
     <div>
-      <form className="w-full max-w-lg">
+      <div className="flex  w-full max-w px-4 py-8  dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
+        <Formik
+      initialValues={formData}
+      validationSchema={vaccineSchema}
+      onSubmit={(values) => {
+        handleFormSubmit(values)
+      }}
+    >
+      {(formik) => {
+        const { errors, touched, isValid, dirty, setFieldValue, values } = formik;
+        return (
+          <div className="container-vaccine">
+            <Form>
+            <div className="flex-column justify-center">
+                <div className="photo-wrapper p-2">
+                  <img className="w-32 h-32 rounded-full mx-auto" src={imagePreview} alt="Profile"></img>
+                </div>
+                <input id="files" className=" hidden ml-[100px] mt-5 bg-blue-500 capitalize hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded justify-end" onChange={(e) => handleImageSelect(e, setFieldValue)} accept="png/jpeg" type="file">
+                </input>
+                <label className="block w-1/2 m-auto text-center mt-5 text-lg uppercase tracking-wide text-white pointer text-xs font-bold mb-2 pointer bg-blue-500 capitalize hover:bg-blue-700 text-white font-bold py-2 px-4 " for="files" >{action === 'add' ? 'Add Image' : 'Change Image'} </label>
+                <ErrorMessage name="image" component="span" className="error" />
+            </div>
+                  <div className="form-row">
+                    <label htmlFor="name">Vaccine name: </label>
+                    <Field
+                      type="name"
+                      name="name"
+                      id="name"
+                      className={
+                        errors.name && touched.name ? "input-error" : null
+                      }
+                    />
+                    <ErrorMessage name="name" component="span" className="error" />
+                  </div>
+
+                    <div className="form-row">
+                      <label htmlFor="company_email">Company Email: </label>
+                      <Field
+                        type="company_email"
+                        name="company_email"
+                        id="company_email"
+                        className={
+                          errors.company_email && touched.company_email ? "input-error" : null
+                        }
+                      />
+                      <ErrorMessage
+                        name="company_email"
+                        component="span"
+                        className="error"
+                      />
+                    </div>
+                  <div className="form-row">
+                    <label htmlFor="company_contact">Company Number: </label>
+                    <Field
+                      type="company_contact"
+                      name="company_contact"
+                      id="company_contact"
+                      className={
+                        errors.company_contact && touched.company_contact ? "input-error" : null
+                      }
+                    />
+                    <ErrorMessage name="company_contact" component="span" className="error" />
+                  </div>
+                  <div className="form-row">
+                    <label htmlFor="number_of_dose"> Number of dose: </label>
+                    <Field
+                      type="number_of_dose"
+                      name="number_of_dose"
+                      id="number_of_dose"
+                      className={
+                        errors.number_of_dose && touched.number_of_dose ? "input-error" : null
+                      }
+                    />
+                    <ErrorMessage name="number_of_dose" component="span" className="error" />
+                  </div>
+
+                    <div className="form-row">
+                      <label htmlFor="gender">Gender: </label>
+                      <Field
+                        type="gender"
+                        name="gender"
+                        id="gender"
+                        className={
+                          errors.gender && touched.gender ? "input-error" : null
+                        }
+                      />
+                      <ErrorMessage
+                        name="gender"
+                        component="span"
+                        className="error"
+                      />
+                </div>
+              <div className="flex justify-center w-[500px]">
+                <button
+                  type="submit"
+                  className={!(dirty && isValid) ? "disabled-btn" : ""}
+                  disabled={!(dirty && isValid && values.image) }
+                >
+                   {action}
+                </button>
+              </div>
+            </Form>
+          </div>
+        );
+      }}
+    </Formik>
+      </div>
+      {/* <form className="w-full max-w-lg">
         <div className="flex-column justify-center">
           <div className="photo-wrapper p-2">
             <img className="w-32 h-32 rounded-full mx-auto" src={imagePreview} alt="Profile"></img>
@@ -117,7 +237,7 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
           {action}
         </button>
       </div>
-      </form>
+      </form> */}
       
     </div>
   )

@@ -19,7 +19,8 @@ const NavBar = ({ getVaccines }) => {
     company_email: '',
     company_contact: '',
     number_of_dose: '',
-    image: ''
+    image: '',
+    gender: ''
   }
 
   const styles = {

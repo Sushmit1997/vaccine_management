@@ -23,7 +23,8 @@ const RegisterPage = () => {
 
   const initialValues = {
     email: "",
-    password: ""
+    password: "",
+    confirmpassword: ""
   }
 
   const registerSchema = Yup.object().shape({
@@ -35,6 +36,13 @@ const RegisterPage = () => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
       "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
     ),
+    confirmpassword: Yup.string().required("Re-enter your password").when("password", {
+      is: val => (val && val.length > 0 ? true : false),
+      then: Yup.string().oneOf(
+        [Yup.ref("password")],
+        "Both password need to be the same"
+      )
+    })
   })
 
   useEffect(() => {
@@ -47,8 +55,12 @@ const RegisterPage = () => {
   }, [])
 
 
-  const handleSubmit = async () => {
-    await Services.sendSignup(registerData).then((response) => {
+  const handleSubmit = async (values) => {
+    const payload = {
+      email: values.email,
+      password: values.password
+    }
+    await Services.sendSignup(payload).then((response) => {
       addToast('Register Successfull.', { appearance: 'success' });
       navigate('/')
     })
@@ -61,11 +73,11 @@ const RegisterPage = () => {
     <div className='flex justify-center p-20'>
        <div className="flex flex-col w-full max-w-md px-4 py-8  dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
         <Formik
-      initialValues={initialValues}
-      validationSchema={registerSchema}
-      onSubmit={(values) => {
-        handleSubmit(values)
-      }}
+          initialValues={initialValues}
+          validationSchema={registerSchema}
+          onSubmit={(values) => {
+            handleSubmit(values)
+          }}
     >
       {(formik) => {
         const { errors, touched, isValid, dirty } = formik;
@@ -98,6 +110,22 @@ const RegisterPage = () => {
                 />
                 <ErrorMessage
                   name="password"
+                  component="span"
+                  className="error"
+                />
+              </div>
+              <div className="form-row">
+                <label htmlFor="password">Confirm Password</label>
+                <Field
+                  type="password"
+                  name="confirmpassword"
+                  id="confirmpassword"
+                  className={
+                    errors.password && touched.password ? "input-error" : null
+                  }
+                />
+                <ErrorMessage
+                  name="confirmpassword"
                   component="span"
                   className="error"
                 />

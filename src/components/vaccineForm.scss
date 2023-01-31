@@ -16,6 +16,13 @@ $border-radius: 4px;
     margin-bottom: 2rem;
   }
 
+  .add-image-label{
+    color: white;
+    span{
+        color: rgb(233, 13, 13);
+    }
+  }
+
   label,
   input {
     color: $text-color;

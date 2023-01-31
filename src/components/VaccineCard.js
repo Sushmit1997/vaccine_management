@@ -69,6 +69,7 @@ const VaccineCard = ({ vaccine, getVaccines }) => {
         </ul>
         </div>
         }
+        <div className="flex-col">
         <div className="photo-wrapper p-2">
         <img className="w-32 h-32 rounded-full mx-auto" src={vaccine.image ? address + "/" + vaccine.image : avatar} alt={`${vaccine.name} Image`}></img>
         </div>
@@ -89,8 +90,13 @@ const VaccineCard = ({ vaccine, getVaccines }) => {
                   <td className="px-2 py-2 text-gray-500 font-semibold">Doses</td>
                   <td className="px-2 py-2">{vaccine.number_of_dose}</td>
                 </tr>
+                <tr>
+                  <td className="px-2 py-2 text-gray-500 font-semibold">Gender</td>
+                  <td className="px-2 py-2">{vaccine.gender}</td>
+                </tr>
               </tbody></table>
           </div>
+        </div>
         </div>
       </div>
       <Modal

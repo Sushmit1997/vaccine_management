@@ -47,11 +47,12 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
   }
 
   const vaccineSchema = Yup.object().shape({
-    name: Yup.string().required("Required"),
-    company_email : Yup.string().email().required("Required"),
-    company_contact: Yup.string().required("Required"),
-    number_of_dose: Yup.number().required("Required"),
-    image: Yup.mixed()
+    name: Yup.string().required("Vaccine name is required"),
+    company_email : Yup.string().email("Invalid Email").required("Email required"),
+    company_contact: Yup.string().required("Contact number is required"),
+    number_of_dose: Yup.number().required("Number of doses is required"),
+    image: Yup.string().required(""),
+    gender: Yup.string().required("Gender is required.")
   });
 
 
@@ -63,6 +64,7 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
     data.append('company_email', values.company_email)
     data.append('company_contact', values.company_contact)
     data.append('number_of_dose', values.number_of_dose)
+    data.append('gender',values.gender)
 
 
     action === 'add' ?
@@ -102,9 +104,9 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
                 <div className="photo-wrapper p-2">
                   <img className="w-32 h-32 rounded-full mx-auto" src={imagePreview} alt="Profile"></img>
                 </div>
-                <input id="files" className=" hidden ml-[100px] mt-5 bg-blue-500 capitalize hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded justify-end" onChange={(e) => handleImageSelect(e, setFieldValue)} accept="png/jpeg" type="file">
+                <input  id="files" className=" hidden ml-[100px] mt-5 bg-blue-500 capitalize hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded justify-end" onChange={(e) => handleImageSelect(e, setFieldValue)} accept="png/jpeg" type="file">
                 </input>
-                <label className="block w-1/2 m-auto text-center mt-5 text-lg uppercase tracking-wide text-white pointer text-xs font-bold mb-2 pointer bg-blue-500 capitalize hover:bg-blue-700 text-white font-bold py-2 px-4 " for="files" >{action === 'add' ? 'Add Image' : 'Change Image'} </label>
+                <label className="block w-1/2 m-auto text-center mt-5 text-lg uppercase tracking-wide text-white-important pointer  font-bold mb-2 pointer bg-blue-500 capitalize hover:bg-blue-700 font-bold py-2 px-4 add-image-label " for="files" >{action === 'add' ? 'Add Image' : 'Change Image'}&nbsp;<span>*</span> </label>
                 <ErrorMessage name="image" component="span" className="error" />
             </div>
                   <div className="form-row">
@@ -137,7 +139,7 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
                       />
                     </div>
                   <div className="form-row">
-                    <label htmlFor="company_contact">Company Number: </label>
+                    <label htmlFor="company_contact">Company Contact Number: </label>
                     <Field
                       type="company_contact"
                       name="company_contact"
@@ -163,14 +165,17 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
 
                     <div className="form-row">
                       <label htmlFor="gender">Gender: </label>
-                      <Field
-                        type="gender"
-                        name="gender"
-                        id="gender"
-                        className={
-                          errors.gender && touched.gender ? "input-error" : null
-                        }
-                      />
+                      <Field 
+                      type="gender"
+                      id="gender" 
+                      as="select" 
+                      name="gender"
+                      placeholder="Select Gender">
+                        <option value="" label="Select a gender"> Select gender</option>
+                        <option key="Male" value="Male">Male</option>
+                        <option key="Female" value="Female">Female</option>
+                        <option key="Other" value="Other">Other</option>
+                      </Field>
                       <ErrorMessage
                         name="gender"
                         component="span"
@@ -181,7 +186,7 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
                 <button
                   type="submit"
                   className={!(dirty && isValid) ? "disabled-btn" : ""}
-                  disabled={!(dirty && isValid && values.image) }
+                  disabled={!(dirty && isValid) }
                 >
                    {action}
                 </button>

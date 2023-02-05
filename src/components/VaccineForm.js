@@ -84,7 +84,7 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
 
   return (
     <div>
-      <div className="flex  w-full max-w px-4 py-8  dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
+      <div className="flex  w-full max-w px-4 py-8  sm:px-6 md:px-8 lg:px-10">
         <Formik
       initialValues={formData}
       validationSchema={vaccineSchema}

@@ -13,6 +13,8 @@ const Services = require('../remoteServices/RemoteServices');
 
 const RegisterPage = () => {
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const [registerData, setRegisterData] = useState({
     email: '',
     password: ''
@@ -60,11 +62,14 @@ const RegisterPage = () => {
       email: values.email,
       password: values.password
     }
+    setIsLoading(true)
     await Services.sendSignup(payload).then((response) => {
+      setIsLoading(false)
       addToast('Register Successfull.', { appearance: 'success' });
       navigate('/')
     })
       .catch((error) => {
+        setIsLoading(false)
         addToast('Registration failed.', { appearance: 'error' });
       })
   }
@@ -134,7 +139,7 @@ const RegisterPage = () => {
               <button
                 type="submit"
                 className={!(dirty && isValid) ? "disabled-btn" : ""}
-                disabled={!(dirty && isValid)}
+                disabled={!(dirty && isValid) || isLoading}
               >
                 Sign Up
               </button>
@@ -145,7 +150,7 @@ const RegisterPage = () => {
     </Formik>
         <div className="flex items-center justify-center mt-6">
           <a href="#" target="_blank" className="inline-flex items-center text-xs font-thin text-center text-gray-500 hover:text-gray-700 dark:text-gray-100 dark:hover:text-white">
-            <span className="ml-2 text-black">
+            <span className="ml-2 text-black text-base">
              Already have an account? &nbsp; <Link className='text-blue-600' to="/">Sign In</Link>
             </span>
           </a>

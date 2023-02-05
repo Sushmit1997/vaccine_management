@@ -8,17 +8,15 @@ import "./Form.scss"
 
 const Services = require('../remoteServices/RemoteServices');
 
-
-
 const LoginPage = () => {
-
-
   const initialValues = {
     email: "",
     password: ""
   }
 
   const { addToast } = useToasts();
+
+  const [isLoading, setIsLoading] = useState(false)
 
   let navigate = useNavigate();
 
@@ -40,13 +38,16 @@ const LoginPage = () => {
   });
 
   const handleSubmit = async (values) => {
+    setIsLoading(true)
     await Services.sendSignin(values).then((response) => {
+      setIsLoading(false)
       addToast('Signin Successfull', { appearance: 'success' });
       localStorage.setItem('token', response.token);
       localStorage.setItem('user', JSON.stringify(response.user))
       navigate('home')
     })
       .catch((err) => {
+        setIsLoading(false)
         addToast("Invalid Email or Password.", { appearance: 'error' });
       })
   }
@@ -100,7 +101,7 @@ const LoginPage = () => {
               <button
                 type="submit"
                 className={!(dirty && isValid) ? "disabled-btn" : ""}
-                disabled={!(dirty && isValid)}
+                disabled={!(dirty && isValid) || isLoading}
               >
                 Sign In
               </button>
@@ -111,7 +112,7 @@ const LoginPage = () => {
     </Formik>
         <div className="flex items-center justify-center mt-6">
           <a href="#" target="_blank" className="inline-flex items-center text-xs font-thin text-center text-gray-500 hover:text-gray-700 dark:text-gray-100 dark:hover:text-white">
-            <span className="ml-2 text-black">
+            <span className="ml-2 text-black text-base">
               You don&#x27;t have an account? &nbsp; <Link className='text-blue-600' to="/register">Register</Link>
             </span>
           </a>

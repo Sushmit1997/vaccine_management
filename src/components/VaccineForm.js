@@ -15,6 +15,8 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
   const address = process.env.REACT_APP_API_URL
   const [imagePreview, setImagePreview] = useState(address + "/" + vaccine?.image)
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const formData = {
     name: vaccine.name,
     company_email: vaccine.company_email,
@@ -55,6 +57,8 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
 
   const handleFormSubmit = (values) => {
 
+    setIsLoading(true)
+
     const data = new FormData()
     data.append('image', values.image)
     data.append('name', values.name)
@@ -66,15 +70,19 @@ const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
 
     action === 'add' ?
       Services.addVaccine(data).then((res) => {
+        setIsLoading(false)
         handleActionSuccess()
         addToast('Vaccine added.', { appearance: 'success' });
       }).catch((err) => {
+        setIsLoading(false)
         addToast('Failed', { appearance: 'error' });
       }) :
       Services.updateVaccine(data, vaccine._id).then((res) => {
+        setIsLoading(false)
         handleActionSuccess()
         addToast('Vaccine updated.', { appearance: 'success' });
       }).catch((err) => {
+        setIsLoading(false)
         addToast('Failed', { appearance: 'error' });
       })
 

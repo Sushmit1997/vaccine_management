@@ -1,8 +1,6 @@
 
 import { useEffect, useState } from "react"
 import { useToasts } from "react-toast-notifications";
-import { checkIfFilesAreCorrectType, checkIfFilesAreTooBig } from "../utils/fileValidation";
-
 import { avatar } from "../assets"
 
 import "./vaccineForm.scss"
@@ -14,8 +12,7 @@ const isImage = require('../utils/isImage')
 const Services = require('../remoteServices/RemoteServices');
 
 const VaccineForm = ({ action, vaccine, handleActionSuccess }) => {
-  const address = 'http://localhost:5000'
-  // const address = process.env.REACT_APP_API_URL
+  const address = process.env.REACT_APP_API_URL
   const [imagePreview, setImagePreview] = useState(address + "/" + vaccine?.image)
 
   const formData = {

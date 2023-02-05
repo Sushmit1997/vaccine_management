@@ -21,8 +21,7 @@ const VaccineCard = ({ vaccine, getVaccines }) => {
   const [showModal, setShowModal] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
-  const address = 'http://localhost:5000'
-  // const address = process.env.REACT_APP_API_URL
+  const address = process.env.REACT_APP_API_URL
 
   const { addToast } = useToasts();
 

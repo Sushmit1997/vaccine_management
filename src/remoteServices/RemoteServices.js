@@ -1,13 +1,13 @@
 const axios = require('axios');
 
-// const remote = {
-//   address: process.env.REACT_APP_API_URL
-// }
-
-
 const remote = {
-  address: 'http://localhost:5000'
+  address: process.env.REACT_APP_API_URL
 }
+
+
+// const remote = {
+//   address: 'http://localhost:5000'
+// }
 
 const getRequests = (api) => {
   let token = localStorage.getItem('token')

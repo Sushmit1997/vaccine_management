@@ -136,7 +136,7 @@ const RegisterPage = () => {
                 className={!(dirty && isValid) ? "disabled-btn" : ""}
                 disabled={!(dirty && isValid)}
               >
-                Sign In
+                Sign Up
               </button>
             </Form>
           </div>

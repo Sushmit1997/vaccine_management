@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { CircularProgress } from '@material-ui/core';
 import * as Yup from "yup";
 
 import "./Form.scss"
@@ -103,7 +104,7 @@ const LoginPage = () => {
                 className={!(dirty && isValid) ? "disabled-btn" : ""}
                 disabled={!(dirty && isValid) || isLoading}
               >
-                Sign In
+                {!isLoading? "Sign In" : <CircularProgress color='secondary'/>}
               </button>
             </Form>
           </div>

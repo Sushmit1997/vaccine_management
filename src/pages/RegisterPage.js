@@ -7,6 +7,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import "./Form.scss"
+import { CircularProgress } from '@material-ui/core';
 
 
 const Services = require('../remoteServices/RemoteServices');
@@ -141,7 +142,7 @@ const RegisterPage = () => {
                 className={!(dirty && isValid) ? "disabled-btn" : ""}
                 disabled={!(dirty && isValid) || isLoading}
               >
-                Sign Up
+                {!isLoading? 'Sign Up' : <CircularProgress color='secondary'/>}
               </button>
             </Form>
           </div>
